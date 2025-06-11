@@ -59,3 +59,6 @@ src/
 ## Đóng góp
 
 Mọi đóng góp đều được hoan nghênh. Vui lòng tạo issue hoặc pull request để đóng góp.
+
+nodemon server.js
+npm start
