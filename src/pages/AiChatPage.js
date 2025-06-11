@@ -15,8 +15,6 @@ import SendIcon from "@mui/icons-material/Send";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import axios from "axios";
 
-const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
-
 function AiChatPage() {
   const [messages, setMessages] = useState([
     {
@@ -39,36 +37,10 @@ function AiChatPage() {
     setLoading(true);
 
     try {
-      const userMessages = [
-        {
-          role: "system",
-          content:
-            "Bạn là UniGuide AI, chuyên tư vấn chọn ngành học, trường đại học phù hợp với sở thích, năng lực, điểm thi, khu vực... Hãy trả lời ngắn gọn, thân thiện, tập trung vào lĩnh vực giáo dục đại học Việt Nam.",
-        },
-        ...messages.map((msg) => ({
-          role: msg.sender === "user" ? "user" : "assistant",
-          content: msg.text,
-        })),
-        { role: "user", content: input },
-      ];
-
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-3.5-turbo",
-          messages: userMessages,
-          max_tokens: 300,
-          temperature: 0.7,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-          },
-        }
-      );
-
-      const reply = response.data.choices[0].message.content.trim();
+      const response = await axios.post("http://localhost:5000/api/chat", {
+        message: "Hãy trả lời ngắn gọn, tối đa 3-4 câu. " + input,
+      });
+      const reply = response.data.reply.trim();
       setMessages((msgs) => [...msgs, { sender: "bot", text: reply }]);
     } catch (err) {
       setMessages((msgs) => [
